@@ -1,5 +1,6 @@
 # ff_gen
 
+```
 Usage: ff_generator.py [-h] file seed
 
 Generate Fantasy Draft Order and Schedules
@@ -10,3 +11,4 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
+```
