@@ -1,7 +1,7 @@
 import random
 import csv
 from collections import Counter
-from itertools import cycle
+import argparse
 
 __author__ = 'Alex H Wagner'
 
@@ -21,7 +21,7 @@ class Team:
 
 class FantasyGenerator:
 
-    def __init__(self, team_file='teams.txt', seed=None, season_length=14):
+    def __init__(self, team_file, seed=None, season_length=14):
         with open(team_file) as f:
             reader = csv.DictReader(f, delimiter='\t')
             self.teams = [Team(x['Manager'], x['Team_Name']) for x in reader]
@@ -75,8 +75,13 @@ class FantasyGenerator:
 
 
 if __name__ == '__main__':
-    generate = FantasyGenerator(seed=1000)
+    parser = argparse.ArgumentParser(description='Generate Fantasy Draft Order and Schedules')
+    parser.add_argument('file', type=str, help='A tab-separated file with headers "Manager" and "Team_Name"')
+    parser.add_argument('seed', type=int, help='The seed for the random number generator')
+    args = parser.parse_args()
+    generate = FantasyGenerator(args.file, seed=args.seed)
     s = generate.schedule()
+    print('---SCHEDULE---')
     for i, week in enumerate(s):
         print('Week {0}:'.format(i + 1))
         for match in week:
