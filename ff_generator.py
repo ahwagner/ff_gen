@@ -38,7 +38,10 @@ class FantasyGenerator:
         random.seed(self.seed * 2)
         self.match_counter = Counter()
         schedule = list()
-        rotation = random.sample(self.teams + [Team('BYE', 'Nobody')], len(self.teams) + 1)
+        if len(self.teams) % 2:
+            rotation = random.sample(self.teams + [Team('BYE', 'Nobody')], len(self.teams) + 1)
+        else:
+            rotation = random.sample(self.teams, len(self.teams))
         for i in range(self.season_length):
             available = rotation.copy()
             week = list()
