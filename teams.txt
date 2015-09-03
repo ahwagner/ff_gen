@@ -1,0 +1,10 @@
+Manager	Team_Name
+Malachi	Team1
+Obi	Team2
+KK	Team3
+Zach	Team4
+Alex	Team5
+Ben	Team6
+Lee	Team7
+Katie	Team8
+Nick	Team9
