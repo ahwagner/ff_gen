@@ -8,15 +8,15 @@ __author__ = 'Alex H Wagner'
 
 class Team:
 
-    def __init__(self, manager, team_name):
+    def __init__(self, manager, division):
         self.manager = manager
-        self.team_name = team_name
+        self.division = division
 
     def __repr__(self):
-        return '{0} ({1})'.format(self.team_name, self.manager)
+        return '{0} ({1})'.format(self.manager, self.division)
 
     def __lt__(self, other):
-        return self.manager + self.team_name < other.manager + other.team_name
+        return self.manager < other.manager
 
 
 class FantasyGenerator:
@@ -25,7 +25,7 @@ class FantasyGenerator:
         with open(team_file) as f:
             reader = csv.DictReader(f, delimiter='\t')
             self.teams = [Team(x['Manager'], x['Team_Name']) for x in reader]
-            self.teams.sort(key=lambda x: x.manager)
+            self.teams.sort()
         self.seed = seed
         self.season_length = season_length
         self.match_counter = Counter()
@@ -79,10 +79,10 @@ class FantasyGenerator:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate Fantasy Draft Order and Schedules')
-    parser.add_argument('file', type=str, help='A tab-separated file with headers "Manager" and "Team_Name"')
-    parser.add_argument('seed', type=int, help='The seed for the random number generator')
+    parser.add_argument('managers', type=str, help='A file with a tab-separated manager name and division on each line')
+    parser.add_argument('seeds', type=str, help='A file with input expressions for seed generation')
     args = parser.parse_args()
-    generate = FantasyGenerator(args.file, seed=args.seed)
+    generate = FantasyGenerator(managers_file=args.managers, seeds_file=args.seeds)
     s = generate.schedule()
     print('---SCHEDULE---')
     for i, week in enumerate(s):
