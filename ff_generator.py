@@ -81,7 +81,6 @@ class FantasyGenerator:
             self._assign_institution_to_division('WUSTL', self.WUSTL)
             self._balance_divisions(self.NCH, self.WUSTL)
 
-
     def generate_draft_order(self):
         self.draft_order = random.sample(self.teams, len(self.teams))
         return
