@@ -8,9 +8,10 @@ __author__ = 'Alex H Wagner'
 
 class Team:
 
-    def __init__(self, manager, division):
+    def __init__(self, manager, institution):
         self.manager = manager
-        self.division = division
+        self.institution = institution
+        self.division = None
 
     def __repr__(self):
         return '{0} ({1})'.format(self.manager, self.division)
@@ -21,21 +22,71 @@ class Team:
 
 class FantasyGenerator:
 
-    def __init__(self, team_file, seed=None, season_length=14):
-        with open(team_file) as f:
-            reader = csv.DictReader(f, delimiter='\t')
-            self.teams = [Team(x['Manager'], x['Team_Name']) for x in reader]
+    NCH = 'East'
+    WUSTL = 'West'
+
+    def __init__(self, managers_file_path, seed=None, season_length=14):
+        with open(managers_file_path) as f:
+            reader = csv.DictReader(f, delimiter=',')
+            self.teams = [Team(x['Manager'], x['Institution']) for x in reader]
             self.teams.sort()
-        self.seed = seed
+        random.seed(seed)
+        self.draft_order = None
+        self.schedule = None
         self.season_length = season_length
         self.match_counter = Counter()
+        self.generate_divisions()
+        self.generate_draft_order()
+        self.generate_schedule()
 
-    def draft_order(self):
-        random.seed(self.seed)
-        return random.sample(self.teams, len(self.teams))
+    def _assign_institution_to_division(self, institution, division):
+        for team in self.teams:
+            if team.institution == institution:
+                team.division = division
+        return
 
-    def schedule(self):
-        random.seed(self.seed * 2)
+    def _balance_divisions(self, div1, div2):
+        div_size = len(self.teams) / 2
+        d = {
+            None: [],
+            div1: [],
+            div2: []
+        }
+        for team in self.teams:
+            d[team.division].append(team)
+        div1_openings = div_size - len(d[div1])
+        unassigned_teams = d[None]
+        random.shuffle(unassigned_teams)
+        for i, team in enumerate(unassigned_teams):
+            if i < div1_openings:
+                team.division = div1
+            else:
+                team.division = div2
+
+    def _clear_divisions(self):
+        for team in self.teams:
+            team.division = None
+
+    def generate_divisions(self):
+        self._clear_divisions()
+        c = Counter([x.institution for x in self.teams])
+        assert sorted(c.keys()) == ['NCH', 'WUSTL']
+        if c['NCH'] == c['WUSTL']:
+            self._assign_institution_to_division('NCH', self.NCH)
+            self._assign_institution_to_division('WUSTL', self.WUSTL)
+        elif c['NCH'] < c['WUSTL']:
+            self._assign_institution_to_division('NCH', self.NCH)
+            self._balance_divisions(self.NCH, self.WUSTL)
+        else:
+            self._assign_institution_to_division('WUSTL', self.WUSTL)
+            self._balance_divisions(self.NCH, self.WUSTL)
+
+
+    def generate_draft_order(self):
+        self.draft_order = random.sample(self.teams, len(self.teams))
+        return
+
+    def generate_schedule(self):
         self.match_counter = Counter()
         schedule = list()
         if len(self.teams) % 2:
@@ -80,15 +131,14 @@ class FantasyGenerator:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate Fantasy Draft Order and Schedules')
     parser.add_argument('managers', type=str, help='A file with a tab-separated manager name and division on each line')
-    parser.add_argument('seeds', type=str, help='A file with input expressions for seed generation')
+    parser.add_argument('seed', type=int, help='A league-generated seed for reproducing the schedule and draft order')
     args = parser.parse_args()
-    generate = FantasyGenerator(managers_file=args.managers, seeds_file=args.seeds)
-    s = generate.schedule()
+    fg = FantasyGenerator(managers_file_path=args.managers, seed=args.seed)
     print('---SCHEDULE---')
-    for i, week in enumerate(s):
+    for i, week in enumerate(fg.schedule):
         print('Week {0}:'.format(i + 1))
         for match in week:
             print('\t{0}'.format(match))
     print('---DRAFT ORDER---')
-    for team in generate.draft_order():
+    for team in fg.draft_order:
         print(team)
