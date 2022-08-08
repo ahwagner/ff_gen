@@ -160,6 +160,6 @@ if __name__ == '__main__':
         print('Week {0}:'.format(i + 1))
         for match in week:
             print('\t{0}'.format(match))
-    print('---DRAFT ORDER---')
+    print('---PRE-DRAFT GAMES INITIAL ORDER---')
     for team in fg.draft_order:
         print(team)
