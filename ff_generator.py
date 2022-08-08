@@ -102,8 +102,9 @@ class FantasyGenerator:
         l = len(wustl)
         wustl_cycle = cycle(wustl)
         nch_cycle = cycle(nch)
-        matchups = list()
+
         for _ in range(l - 1):
+            matchups = list()
             for __ in range(l // 2):
                 matchups.append((next(wustl_cycle), next(wustl_cycle)))
                 matchups.append((next(nch_cycle), next(nch_cycle)))
@@ -118,8 +119,8 @@ class FantasyGenerator:
         l = len(wustl)
         wustl_cycle = cycle(wustl)
         nch_cycle = cycle(nch)
-        matchups = list()
         for _ in range(l):
+            matchups = list()
             for __ in range(l):
                 matchups.append((next(wustl_cycle), next(nch_cycle)))
             next(wustl_cycle)
@@ -142,25 +143,6 @@ class FantasyGenerator:
             else:
                 self._add_intradivisional(wustl_div, nch_div)
         self.schedule = self.schedule[:weeks]
-
-    def best_matches(self, team_1, available):
-        best_value = 50
-        best_available = []
-        for team_2 in available:
-            match = FantasyGenerator.match(team_1, team_2)
-            match_count = self.match_counter[match]
-            if match_count < best_value:
-                best_value = match_count
-                best_available = [team_2]
-            elif match_count == best_value:
-                best_available.append(team_2)
-        return best_available
-
-    @staticmethod
-    def match(team_1, team_2):
-        first, second = sorted((team_1, team_2))
-        match = '{0} vs. {1}'.format(first, second)
-        return match
 
 
 if __name__ == '__main__':
