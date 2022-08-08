@@ -1,14 +1,17 @@
 # ff_gen
 
 ```
-Usage: ff_generator.py [-h] file seed
+usage: ff_generator.py [-h] [--assign_pis] managers seed
 
 Generate Fantasy Draft Order and Schedules
 
 positional arguments:
-  file        A tab-separated file with headers "Manager" and "Team_Name"
-  seed        The seed for the random number generator
+  managers      A file with a tab-separated manager name and division on each
+                line
+  seed          A league-generated seed for reproducing the schedule and draft
+                order
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -h, --help    show this help message and exit
+  --assign_pis  If set, always assigns lab PIs to respective league divisions
 ```
