@@ -133,10 +133,10 @@ class FantasyGenerator:
         for team in self.teams:
             divisions[team.division].append(team)
         assert len(divisions) == 2  # assuming one each, NCH and WUSTL for now
-        wustl_div = random.sample(divisions[self.WUSTL], len(divisions[self.WUSTL]))
-        nch_div = random.sample(divisions[self.NCH], len(divisions[self.NCH]))
-        assert len(wustl_div) == len(nch_div)  # if not this, need to add "BYE"
         while len(self.schedule) < weeks:
+            wustl_div = random.sample(divisions[self.WUSTL], len(divisions[self.WUSTL]))
+            nch_div = random.sample(divisions[self.NCH], len(divisions[self.NCH]))
+            assert len(wustl_div) == len(nch_div)  # if not this, need to add "BYE"
             if len(wustl_div) % 2 == 0:
                 self._add_intradivisional(wustl_div, nch_div)
                 self._add_interdivisional(wustl_div, nch_div)
