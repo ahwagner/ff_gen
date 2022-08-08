@@ -1,0 +1,15 @@
+Manager,Institution
+Nick Spies,WUSTL
+Erica Barnell,WUSTL
+Obi Griffith,WUSTL
+Malachi Griffith,WUSTL
+Lee Trani,WUSTL
+Brian Li,WUSTL
+Susanna Kiwala,WUSTL
+Zachary Skidmore,WUSTL
+Thomas Mooney,WUSTL
+Jason Saliba,WUSTL
+Alex Wagner,NCH
+Matthew Cannon,NCH
+Robert Schuetz,NCH
+Wesley Goar,NCH
