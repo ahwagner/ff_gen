@@ -147,7 +147,7 @@ class FantasyGenerator:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate Fantasy Draft Order and Schedules')
-    parser.add_argument('managers', type=str, help='A file with a tab-separated manager name and division on each line')
+    parser.add_argument('managers', type=str, help='A file with a comma-separated manager name and division on each line')
     parser.add_argument('seed', type=int, help='A league-generated seed for reproducing the schedule and draft order')
     parser.add_argument('--assign_pis', action='store_true', help='If set, always assigns lab PIs to respective league divisions')
     args = parser.parse_args()
